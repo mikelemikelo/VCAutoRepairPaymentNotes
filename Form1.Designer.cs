@@ -45,6 +45,8 @@ namespace VCAutoRepairPaymentNotes
             this.optionalInternalNotesField = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.amountAsTextTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // checkBody
@@ -89,7 +91,7 @@ namespace VCAutoRepairPaymentNotes
             // 
             this.middleSummary.AutoSize = true;
             this.middleSummary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.middleSummary.Location = new System.Drawing.Point(12, 296);
+            this.middleSummary.Location = new System.Drawing.Point(15, 344);
             this.middleSummary.Name = "middleSummary";
             this.middleSummary.Size = new System.Drawing.Size(2, 15);
             this.middleSummary.TabIndex = 5;
@@ -106,9 +108,9 @@ namespace VCAutoRepairPaymentNotes
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Highlight;
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Location = new System.Drawing.Point(737, 189);
+            this.button1.Location = new System.Drawing.Point(737, 247);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 60);
+            this.button1.Size = new System.Drawing.Size(128, 77);
             this.button1.TabIndex = 4;
             this.button1.Text = "Print";
             this.button1.UseVisualStyleBackColor = false;
@@ -117,7 +119,7 @@ namespace VCAutoRepairPaymentNotes
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 85);
+            this.label3.Location = new System.Drawing.Point(12, 142);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 8;
@@ -126,7 +128,7 @@ namespace VCAutoRepairPaymentNotes
             // memo
             // 
             this.memo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.memo.Location = new System.Drawing.Point(12, 101);
+            this.memo.Location = new System.Drawing.Point(12, 158);
             this.memo.Multiline = true;
             this.memo.Name = "memo";
             this.memo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -138,7 +140,7 @@ namespace VCAutoRepairPaymentNotes
             // 
             this.resetFormButton.BackColor = System.Drawing.SystemColors.ControlDark;
             this.resetFormButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.resetFormButton.Location = new System.Drawing.Point(12, 419);
+            this.resetFormButton.Location = new System.Drawing.Point(12, 464);
             this.resetFormButton.Name = "resetFormButton";
             this.resetFormButton.Size = new System.Drawing.Size(127, 34);
             this.resetFormButton.TabIndex = 5;
@@ -149,7 +151,7 @@ namespace VCAutoRepairPaymentNotes
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 270);
+            this.label4.Location = new System.Drawing.Point(9, 320);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 13);
             this.label4.TabIndex = 11;
@@ -167,7 +169,7 @@ namespace VCAutoRepairPaymentNotes
             // optionalInternalNotesField
             // 
             this.optionalInternalNotesField.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionalInternalNotesField.Location = new System.Drawing.Point(12, 189);
+            this.optionalInternalNotesField.Location = new System.Drawing.Point(12, 247);
             this.optionalInternalNotesField.Multiline = true;
             this.optionalInternalNotesField.Name = "optionalInternalNotesField";
             this.optionalInternalNotesField.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -178,7 +180,7 @@ namespace VCAutoRepairPaymentNotes
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(9, 173);
+            this.label5.Location = new System.Drawing.Point(9, 231);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(422, 13);
             this.label5.TabIndex = 14;
@@ -189,17 +191,38 @@ namespace VCAutoRepairPaymentNotes
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(818, 464);
+            this.label6.Location = new System.Drawing.Point(810, 464);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(55, 18);
             this.label6.TabIndex = 15;
-            this.label6.Text = "V1.0.0";
+            this.label6.Text = "V1.0.1";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(12, 88);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(80, 13);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "Amount as text:";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
+            // amountAsTextTextBox
+            // 
+            this.amountAsTextTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.amountAsTextTextBox.Location = new System.Drawing.Point(12, 104);
+            this.amountAsTextTextBox.Name = "amountAsTextTextBox";
+            this.amountAsTextTextBox.Size = new System.Drawing.Size(853, 35);
+            this.amountAsTextTextBox.TabIndex = 17;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(877, 486);
+            this.ClientSize = new System.Drawing.Size(877, 506);
+            this.Controls.Add(this.amountAsTextTextBox);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.optionalInternalNotesField);
@@ -241,6 +264,8 @@ namespace VCAutoRepairPaymentNotes
         private System.Windows.Forms.TextBox optionalInternalNotesField;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox amountAsTextTextBox;
     }
 }
 
