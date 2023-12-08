@@ -24,6 +24,8 @@ namespace VCAutoRepairPaymentNotes
 
 
         private static Font DEFAULT_PRINT_FONT = new Font("Arial", 12);
+        private static Font AMOUNT_AS_TEXT_FONT = new Font("Arial", 10, FontStyle.Italic);
+        private static Font SUMMARY_PRINT_FONT = new Font("Arial", 09);
         private static SolidBrush DEFAULT_PRINT_BRUSH = new SolidBrush(Color.Black);
 
         public Form1()
@@ -66,33 +68,36 @@ namespace VCAutoRepairPaymentNotes
         private void PrintPageHandler(object sender, PrintPageEventArgs e)
         {
             float xPosition = e.MarginBounds.Left - 10;
-            float yPosition = e.MarginBounds.Top + 20;
+            float yPosition = e.MarginBounds.Top + 18;
             float oneThirdOfPageHeight = e.PageBounds.Height / 3;
 
 
-            float checkDateYPosition = e.MarginBounds.Top / 2;
-            float summaryXPosition = e.MarginBounds.Left / 2;
+            float checkDateYPosition = e.MarginBounds.Top / 3;
+            float summaryXPosition = e.MarginBounds.Left / 3;
 
 
 
             //Date field
-            e.Graphics.DrawString(this.checkDateTextBox.Text, Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition + 580, checkDateYPosition);
+            e.Graphics.DrawString(this.checkDateTextBox.Text, Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition + 540, checkDateYPosition);
 
             //Row 1
             e.Graphics.DrawString(this.checkBody.Text, Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition, yPosition);
             e.Graphics.DrawString(this.monto.Text, Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition + 580, yPosition);
 
-            yPosition += 122;
+            yPosition += 60;
+            e.Graphics.DrawString(this.amountAsTextTextBox.Text, Form1.AMOUNT_AS_TEXT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition , yPosition);
+
+            yPosition += 60;
             //Row 2
             e.Graphics.DrawString(this.memo.Text, Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, xPosition, yPosition);
 
             //Summary one
             yPosition = oneThirdOfPageHeight;
-            e.Graphics.DrawString(this.generateCheckSummary(), Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, summaryXPosition, yPosition);
+            e.Graphics.DrawString(this.generateCheckSummary(), Form1.SUMMARY_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, summaryXPosition, yPosition);
 
             //Summary two
             yPosition += oneThirdOfPageHeight;
-            e.Graphics.DrawString(this.generateCheckSummary(), Form1.DEFAULT_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, summaryXPosition, yPosition);
+            e.Graphics.DrawString(this.generateCheckSummary(), Form1.SUMMARY_PRINT_FONT, Form1.DEFAULT_PRINT_BRUSH, summaryXPosition, yPosition);
 
 
         }
@@ -111,6 +116,7 @@ namespace VCAutoRepairPaymentNotes
          * Printed date: format(MMMM dd,yyyy HH:mm:ss)
          * Actual date on check: format(MMMM dd,yyyy) - could be free form as user can modify it manually 
          * Ammount: $ XXXXXX
+         * Amount as text: AAAAEEEEBBBCC
          * Pay to the order of: YYYYYYYYYY
          * Memo: ZZZZZZZ
          * ** Optional - if internal notes is present and its not empty **
@@ -125,6 +131,8 @@ namespace VCAutoRepairPaymentNotes
             checkSummary.Append("Actual date on check: " + this.checkDateTextBox.Text);
             checkSummary.Append("\n");
             checkSummary.Append("Amount: $" + this.monto.Text);
+            checkSummary.Append("\n");
+            checkSummary.Append("Amount as text: " + this.amountAsTextTextBox.Text);
             checkSummary.Append("\n");
             checkSummary.Append("Pay to the order of: " + this.checkBody.Text);
             checkSummary.Append("\n");
@@ -225,7 +233,14 @@ namespace VCAutoRepairPaymentNotes
 
         public static string[] TENS_ARRRAY = { "", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
 
-        
+        private static int ONE_MILLION = 1000000;
+        private static int ONE_HUNDRED_THOUSANDS = 100000;
+        private static int TWENTY_THOUSANDS = 20000;
+        private static int TEN_THOUSANDS = 10000;
+        private static int ONE_THOUSAND = 1000;
+        private static int ONE_HUNDRED = 100;
+
+
         public static string ConvertDoubleToCurrencyText(double amount)
         {
 
@@ -236,20 +251,17 @@ namespace VCAutoRepairPaymentNotes
             }
 
 
-            if(amount > 99999)
+            if(amount >= ONE_MILLION)
             {
-                MessageBox.Show("Tocayo\n\nFor this amount..I'm not even going to worry about translating it to text... enjoy typing it!", "PIMP Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tocayo\n\nFor this amount..I'm not even going to worry about translating it to text...\nEnjoy typing it! ¯\\_(ツ)_/¯", "PIMP Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return "";
             }
 
-
             long dollars = (long)amount;
             int cents = (int)Math.Round((amount - dollars) * 100);
-
             
-
-            string dollarsText = ConvertToText(dollars);
-            string centsText = ConvertToText(cents);
+            string dollarsText = convertAmountToText(dollars);
+            string centsText = convertAmountToText(cents);
 
             if (dollars == 0)
             {
@@ -274,54 +286,66 @@ namespace VCAutoRepairPaymentNotes
 
 
         /*
-         * 
-         * TODO: Fix this method, its not readable and add proper documentation to it
+         * Method that translates an amount (long) into its equivalent as String.
+         * This method is only able to translate numbers less than ONE_MILLION 
          */
-        static string ConvertToText(long value)
+        static string convertAmountToText(long amount)
         {
-            
-            if (value/20000 >= 1)
+            if (amount >= ONE_MILLION)
             {
-                string addS = "";
-                if (value / 20000 > 1)
+                //If value is equal of higher than ONE_MILLION then we don't compute the amount as text
+                return "";
+
+            }
+
+            // For values less than ONE_MILLION 
+            if (amount/ ONE_HUNDRED_THOUSANDS >=1 ) {
+
+                string unitName = " Hundred";
+                if (amount / ONE_HUNDRED_THOUSANDS > 1)
                 {
-                    addS = "s";
+                    unitName += "s";
                 }
-
-                //TODO: FIX this logic and variable names
-                long tens_array_value = value / 10000;
-                long belowTwentyValue = (value/1000) % 10;
-                Console.WriteLine("tens_array_value = " + tens_array_value);
-                Console.WriteLine("belowTwentyValue = " + belowTwentyValue);
-
-                return TENS_ARRRAY[value / 10000] + " " + BELOW_TWENTY_ARRAY[belowTwentyValue] + " Thousand" + addS + " " + ConvertToText(value % 1000);
+                return BELOW_TWENTY_ARRAY[amount / ONE_HUNDRED_THOUSANDS] + unitName + " " + convertAmountToText(amount % ONE_HUNDRED_THOUSANDS);
 
             }
-            else if(value/1000 >= 1)
+            else if (amount/TWENTY_THOUSANDS >= 1)
             {
-                string addS = "";
-                if (value / 1000 > 1)
+                string unitName = " Thousand";
+                if (amount / ONE_THOUSAND > 1)
                 {
-                    addS = "s";
+                    unitName += "s";
                 }
-                return BELOW_TWENTY_ARRAY[value / 1000] + " Thousand" + addS + " " + ConvertToText(value % 1000);
-            }
-            else if(value/100 >= 1)
-            {
-                string addS = "";
-                if (value / 100 > 1) {
-                    addS = "s";
-                }
-                return BELOW_TWENTY_ARRAY[value / 100] + " Hundred" + addS + " " + ConvertToText(value % 100);
-            }else if(value/20 >= 1)
-            {
-                return TENS_ARRRAY[value/ 10] + " " + ConvertToText(value%10);
-            }
 
-            Console.WriteLine("value = " + value);
+                //Calculate 
+                long firstDigitOfThousandsAmount = (amount/ ONE_THOUSAND) % 10;
+                Console.WriteLine("firstDigitOfThousandsAmount= " + firstDigitOfThousandsAmount);
+                return TENS_ARRRAY[amount / TEN_THOUSANDS] + " " + BELOW_TWENTY_ARRAY[firstDigitOfThousandsAmount] + unitName + " " + convertAmountToText(amount % ONE_THOUSAND);
+
+            }
+            else if(amount/ONE_THOUSAND >= 1)
+            {
+                string unitName = " Thousand";
+                if (amount / ONE_THOUSAND > 1)
+                {
+                    unitName += "s";
+                }
+                return BELOW_TWENTY_ARRAY[amount / ONE_THOUSAND] + unitName + " " + convertAmountToText(amount % ONE_THOUSAND);
+            }
+            else if(amount/ ONE_HUNDRED >= 1)
+            {
+                string unitName = " Hundred";
+                if (amount / ONE_HUNDRED > 1) {
+                    unitName += "s";
+                }
+                return BELOW_TWENTY_ARRAY[amount / ONE_HUNDRED] + unitName + " " + convertAmountToText(amount % ONE_HUNDRED);
+            }else if(amount/20 >= 1)
+            {
+                return TENS_ARRRAY[amount/ 10] + convertAmountToText(amount%10);
+            }
 
             //below 20
-            return BELOW_TWENTY_ARRAY[value];
+            return BELOW_TWENTY_ARRAY[amount];
 
         }
     }

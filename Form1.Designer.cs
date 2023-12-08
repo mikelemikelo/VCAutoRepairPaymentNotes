@@ -127,7 +127,7 @@ namespace VCAutoRepairPaymentNotes
             // 
             // memo
             // 
-            this.memo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.memo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.memo.Location = new System.Drawing.Point(12, 158);
             this.memo.Multiline = true;
             this.memo.Name = "memo";
@@ -210,10 +210,10 @@ namespace VCAutoRepairPaymentNotes
             // 
             // amountAsTextTextBox
             // 
-            this.amountAsTextTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.amountAsTextTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.amountAsTextTextBox.Location = new System.Drawing.Point(12, 104);
             this.amountAsTextTextBox.Name = "amountAsTextTextBox";
-            this.amountAsTextTextBox.Size = new System.Drawing.Size(853, 35);
+            this.amountAsTextTextBox.Size = new System.Drawing.Size(853, 22);
             this.amountAsTextTextBox.TabIndex = 17;
             // 
             // Form1
